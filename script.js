@@ -316,6 +316,7 @@ function updateSidebarUser() {
     // ─── STATE ───
     tasks = JSON.parse(localStorage.getItem('toduck_tasks') || '[]');
     projects = JSON.parse(localStorage.getItem('toduck_projects') || '[]');
+    updateSidebarUser();
 
     // Ensure default project
     if (!projects.find(p => p.id === 'default')) {
@@ -651,12 +652,14 @@ function updateSidebarUser() {
     }
 
     function deleteTask(id) {
-      tasks = tasks.filter(t => t.id !== id);
-      saveTasks();
-      render();
-      showToast('🗑️ Tugas dihapus.');
-      renderDashboard();
-    }
+  if (!confirm('⚠️ Yakin ingin menghapus tugas ini?')) return;
+
+  tasks = tasks.filter(t => t.id !== id);
+  saveTasks();
+  render();
+  showToast('🗑️ Tugas dihapus.');
+  renderDashboard();
+}
 
     // ─── PROJECT ───
           function openProjectModal() {
@@ -983,9 +986,16 @@ function renderTaskList() {
 }
 
 function selectTask(id) {
-  selectedTaskId = id;
-  const t = tasks.find(t => t.id === id);
-  if (t) setDuckMsg(`Mengerjakan: "${t.name}" 💪`);
+  if (selectedTaskId === id) {
+    // kalau klik task yang sama → batal pilih
+    selectedTaskId = null;
+    setDuckMsg('Tidak ada tugas yang dipilih 🎯');
+  } else {
+    selectedTaskId = id;
+    const t = tasks.find(t => t.id === id);
+    if (t) setDuckMsg(`Mengerjakan: "${t.name}" 💪`);
+  }
+
   renderTaskList();
 }
 
@@ -1333,5 +1343,5 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
   });
 });
 
-updateSidebarUser();
+// updateSidebarUser();
 renderDashboard();
