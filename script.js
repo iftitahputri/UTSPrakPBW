@@ -26,7 +26,13 @@ let state = {
   calendarMonth: new Date().getMonth()
 };
 
-function todayStr() { return new Date().toISOString().slice(0, 10); }
+function todayStr() {  return formatLocalDate(new Date()); }
+function formatLocalDate(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -78,6 +84,7 @@ function goTo(page) {
 
 // ── DASHBOARD ──────────────────────────────
 function renderDashboard() {
+
   renderCalendar();
   renderDashTaskList();
   updateDuckSpeech();
@@ -87,16 +94,16 @@ function renderDashboard() {
 function renderDashTaskList() {
   const container = document.getElementById('dash-task-list');
   const dateLabel = document.getElementById('task-widget-date');
-  const tasks = tasks.filter(t => t.date === state.selectedDate);
+  const filteredTasks = tasks.filter(t => t.date === state.selectedDate);
 
   dateLabel.textContent = formatDate(state.selectedDate).toUpperCase();
 
-  if (tasks.length === 0) {
+  if (filteredTasks.length === 0) {
     container.innerHTML = `<div style="color:var(--grey);font-size:14px;font-weight:700;padding:20px 0;text-align:center;">Tidak ada tugas untuk hari ini 🐥</div>`;
     return;
   }
 
-  container.innerHTML = tasks
+  container.innerHTML = filteredTasks
     .sort((a, b) => (a.time || '').localeCompare(b.time || ''))
     .map(t => {
       const proj = projects.find(p => p.id === t.projectId) || { color: '#EF4444' };
@@ -119,11 +126,11 @@ function updateDuckSpeech() {
     'Fokus, kamu bisa! 💪',
     'Quack quack! Produktif itu keren! 🚀'
   ];
-  const tasks = tasks.filter(t => t.date === state.selectedDate);
+  const todayTasks = tasks.filter(t => t.date === state.selectedDate);
   const done = tasks.filter(t => t.done).length;
   let msg;
-  if (tasks.length === 0) msg = 'Belum ada tugas hari ini. Santai dulu! 😴';
-  else if (done === tasks.length) msg = 'Semua tugas selesai! Hebat! 🎉';
+  if (todayTasks.length === 0) msg = 'Belum ada tugas hari ini. Santai dulu! 😴';
+  else if (done === todayTasks.length) msg = 'Semua tugas selesai! Hebat! 🎉';
   else msg = messages[Math.floor(Math.random() * messages.length)];
   document.getElementById('duck-speech').textContent = msg;
 }
@@ -164,7 +171,7 @@ function renderCalendar() {
         cellDate = new Date(yr, mo, pos + 1);
       }
 
-      const dateStr = cellDate.toISOString().slice(0, 10);
+      const dateStr = formatLocalDate(cellDate);
       const isToday = dateStr === today;
       const isSelected = dateStr === state.selectedDate;
       const isSun = day === 0;
@@ -341,7 +348,7 @@ function updateSidebarUser() {
       const d = new Date(dateStr + 'T00:00:00');
       const today = todayStr();
       const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowStr = tomorrow.toISOString().slice(0, 10);
+      const tomorrowStr = formatLocalDate(cellDate);
       const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
       const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
       if (dateStr === today) return { label: '📅 Hari Ini', isToday: true };
@@ -621,6 +628,7 @@ function updateSidebarUser() {
       saveTasks();
       closeModal('modal-task');
       render();
+      renderDashboard();
     }
 
     function toggleTask(id) {
@@ -630,6 +638,7 @@ function updateSidebarUser() {
       saveTasks();
       render();
       if (t.done) showToast('🎉 Tugas selesai! Quack!');
+      renderDashboard();
     }
 
     function deleteTask(id) {
@@ -637,6 +646,7 @@ function updateSidebarUser() {
       saveTasks();
       render();
       showToast('🗑️ Tugas dihapus.');
+      renderDashboard();
     }
 
     // ─── PROJECT ───
@@ -752,6 +762,8 @@ function updateSidebarUser() {
     });
 
     // ─── INIT ───
+    state.selectedDate = todayStr();
+    renderDashboard();
     render();
   
 // ── POMO JS ──

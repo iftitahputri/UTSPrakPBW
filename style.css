@@ -28,11 +28,17 @@ body {
   background: var(--yellow-light);
   min-height: 100vh;
   display: flex;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 /* ── SIDEBAR ── */
 .sidebar {
+  position:sticky;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-w);
+  overflow: hidden;
   width: var(--sidebar-w);
   background: var(--yellow);
   display: flex;
@@ -160,6 +166,8 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  height: 100vh;
 }
 
 /* ── WIDGET ── */
