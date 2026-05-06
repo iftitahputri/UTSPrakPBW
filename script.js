@@ -640,25 +640,33 @@ function updateSidebarUser() {
     }
 
     // ─── PROJECT ───
-    function openProjectModal() {
-      document.getElementById('p-name').value = '';
-      selectedColor = '#EF4444';
-      document.querySelectorAll('.color-opt').forEach(c => c.classList.remove('selected'));
-      document.querySelector('.color-opt[data-color="#EF4444"]').classList.add('selected');
-      document.getElementById('modal-project').classList.add('open');
-      setTimeout(() => document.getElementById('p-name').focus(), 100);
-    }
+function openProjectModal() {
+  document.getElementById('modal-project-name').value = '';
+  document.getElementById('modal-project-color').value = '#EF4444';
+  document.getElementById('modal-add-project').classList.add('open');
+}
 
-    function submitProject() {
-      const name = document.getElementById('p-name').value.trim();
-      if (!name) { showToast('⚠️ Nama proyek harus diisi!'); return; }
-      const proj = { id: Date.now().toString(), name, color: selectedColor };
-      projects.push(proj);
-      saveProjects();
-      closeModal('modal-project');
-      render();
-      showToast('📁 Proyek berhasil dibuat!');
-    }
+function submitProject() {
+  const name = document.getElementById('modal-project-name').value.trim();
+  const color = document.getElementById('modal-project-color').value;
+
+  if (!name) {
+    showToast('⚠️ Nama proyek harus diisi!');
+    return;
+  }
+
+  const proj = {
+    id: Date.now().toString(),
+    name,
+    color
+  };
+
+  projects.push(proj);
+  saveProjects();
+  closeModal('modal-add-project');
+  render();
+  showToast('📁 Proyek berhasil dibuat!');
+}
 
     function deleteProject(id) {
       if (!confirm('Hapus proyek ini? Task di dalamnya tidak akan dihapus.')) return;
