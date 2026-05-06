@@ -15,7 +15,7 @@
 ───────────────────────────────────────── -->
 <aside class="sidebar">
   <div class="logo-area">
-    <span class="logo-duck" style="cursor: pointer;" onclick="document.querySelector('.sidebar').classList.toggle('collapsed')">🐥</span>
+    <img src="assets/duck.png" width="80" height="80" alt="To-Duck Mascot" onerror="this.outerHTML='<div class=\'duck-emoji\'>🐥</div>'">
     <span class="logo-text">To-Duck</span>
   </div>
 
@@ -90,12 +90,29 @@
 
       <!-- Duck Area -->
       <div class="duck-area">
-        <div class="duck-speech" id="duck-speech">Quack! Ayo selesaikan tugasmu hari ini! 🎯</div>
-        <div class="duck-img">🦆</div>
-      </div>
 
-    </div>
+  <img 
+    src="https://raw.githubusercontent.com/iftitahputri/ToDoList_Kel7_V2/main/assets/bubble.png"
+    width="100"
+    height="200"
+    class="duck-bubble"
+    alt="bubble"
+  >
+
+  <div class="duck-speech" id="duck-speech">
+    Quack! Ayo selesaikan tugasmu hari ini! 🎯
   </div>
+
+  <img
+    src="https://raw.githubusercontent.com/iftitahputri/ToDoList_Kel7_V2/main/assets/duck.png"
+    width="250"
+    height="250"
+    alt="To-Duck Mascot"
+  >
+
+</div>
+    </div> <!-- dashboard-grid -->
+</div> <!-- page-dashboard -->
 
   <!-- ══ TO-DO LIST PAGE ══ -->
   <div class="page" id="page-todo">
@@ -252,7 +269,13 @@
 
     <!-- Duck -->
     <div class="duck-row">
-      <div class="duck-emoji-big">🦆</div>
+       <img
+    src="https://raw.githubusercontent.com/iftitahputri/ToDoList_Kel7_V2/main/assets/duck.png"
+    width="150"
+    height="150"
+    alt="To-Duck Mascot"
+    style="transform: scaleX(-1);"
+  >
       <div class="duck-bubble" id="duck-msg">Pilih tugas yang mau dikerjakan, terus fokus! 🎯</div>
     </div>
   </div>

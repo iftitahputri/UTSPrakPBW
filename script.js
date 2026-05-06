@@ -427,25 +427,38 @@ function updateSidebarUser() {
     }
 
     function renderTasks() {
-      const container = document.getElementById('todo-content');
-      const filtered = getFilteredTasks();
+  const container = document.getElementById('todo-content');
+  const filtered = getFilteredTasks();
 
-      if (filtered.length === 0) {
-        container.innerHTML = `
+  if (filtered.length === 0) {
+    container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-duck">🦆</div>
-        <p>Tidak ada tugas di sini.</p>
-        <p style="margin-top:6px;font-size:13px;">Quack! Tambah tugas baru yuk!</p>
-      </div>`;
-        return;
-      }
 
-      if (currentView === 'group') {
-        renderGroupView(container, filtered);
-      } else {
-        renderListView(container, filtered);
-      }
-    }
+        <div class="empty-duck">
+          <img
+            src="https://raw.githubusercontent.com/iftitahputri/ToDoList_Kel7_V2/main/assets/duck.png"
+            width="150"
+            height="150"
+            alt="To-Duck Mascot"
+          >
+        </div>
+
+        <p>Tidak ada tugas di sini.</p>
+        <p style="margin-top:6px;font-size:13px;">
+          Quack! Tambah tugas baru yuk!
+        </p>
+
+      </div>
+    `;
+    return;
+  }
+
+  if (currentView === 'group') {
+    renderGroupView(container, filtered);
+  } else {
+    renderListView(container, filtered);
+  }
+}
 
     function renderListView(container, filtered) {
       // Group by date
