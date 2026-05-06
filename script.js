@@ -948,7 +948,7 @@ function updateStats() {
 
 // ── DUCK MESSAGES ──
 function setDuckMsg(msg) {
-  document.getElementById('duck-msg').textContent = msg;
+  document.getElementById('duck-text').textContent = msg;
 }
 
 function updateDuckMsg() {
