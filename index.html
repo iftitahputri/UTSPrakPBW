@@ -79,15 +79,29 @@
         </div>
       </div>
 
-      <!-- Pomodoro Mini Widget -->
-      <div class="widget pomo-mini" onclick="goTo('pomodoro')" style="cursor: pointer;">
-        <div style="font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--red); text-align: center; margin-bottom: 15px;">Pomodoro</div>
-        <div class="pomo-ring" style="width: 130px; height: 130px; border-width: 10px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #fff;">
-          <div class="pomo-time" id="dash-pomo-time" style="font-size: 16px; color: #555;">Sesi: 0<br>Tugas: 0</div>
-        </div>
-        <button class="btn-primary" style="margin-top: 15px; width: 100%; border-radius: 12px; font-size: 14px; padding: 10px;" onclick="goTo('pomodoro')">Buka Pomodoro</button>
-      </div>
+     <!-- Pomodoro Mini Widget -->
+<div class="widget pomo-mini" onclick="goTo('pomodoro')" style="cursor:pointer;">
 
+  <div class="pomo-mini-title">
+    Pomodoro
+  </div>
+
+  <!-- Gambar -->
+  <div class="pomo-ring">
+    <img 
+      src="https://raw.githubusercontent.com/iftitahputri/ToDoList_Kel7_V2/main/assets/Group%209.png"
+      alt="Pomodoro Duck"
+      class="pomo-mini-img"
+    >
+  </div>
+
+  <button 
+    class="btn-primary pomo-mini-btn"
+    onclick="goTo('pomodoro')">
+    Buka Pomodoro
+  </button>
+
+</div>
       <!-- Duck Area -->
       <div class="duck-area">
 
