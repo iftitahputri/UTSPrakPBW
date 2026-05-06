@@ -64,6 +64,7 @@ function activeUser() {
 function goTo(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
   
   const pageEl = document.getElementById('page-' + page);
   if(pageEl) pageEl.classList.add('active');
@@ -344,20 +345,28 @@ function updateSidebarUser() {
       return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
     }
 
-    function formatGroupDate(dateStr) {
-      const d = new Date(dateStr + 'T00:00:00');
-      const today = todayStr();
-      const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1);
-      const tomorrowStr = formatLocalDate(cellDate);
-      const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-      const dayNames = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
-      if (dateStr === today) return { label: '📅 Hari Ini', isToday: true };
-      if (dateStr === tomorrowStr) return { label: '🌅 Besok', isToday: false };
-      return { label: `${dayNames[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`, isToday: false };
-    }
+   function formatGroupDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+
+  const today = todayStr();
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowStr = formatLocalDate(tomorrow);
+
+  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const dayNames = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+
+  if (dateStr === today) return { label: '📅 Hari Ini', isToday: true };
+  if (dateStr === tomorrowStr) return { label: '🌅 Besok', isToday: false };
+
+  return {
+    label: `${dayNames[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`,
+    isToday: false
+  };
+}
 
     
-
     // ─── RENDER ───
     function render() {
       renderProjectPanel();
