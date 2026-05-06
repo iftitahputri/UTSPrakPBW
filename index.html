@@ -1,0 +1,523 @@
+<!-- html/index.html -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Duck</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ─────────────────────────────────────────
+     SIDEBAR
+───────────────────────────────────────── -->
+<aside class="sidebar">
+  <div class="logo-area">
+    <span class="logo-duck" style="cursor: pointer;" onclick="document.querySelector('.sidebar').classList.toggle('collapsed')">🐥</span>
+    <span class="logo-text">To-Duck</span>
+  </div>
+
+  <ul class="nav">
+    <li class="nav-item active" onclick="goTo('dashboard')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      <span class="nav-text">Dashboard</span>
+    </li>
+    <li class="nav-item" onclick="goTo('todo')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+      <span class="nav-text">To-Do List</span>
+    </li>
+    <li class="nav-item" onclick="goTo('pomodoro')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+      <span class="nav-text">Pomodoro</span>
+    </li>
+  </ul>
+
+  <div class="sidebar-bottom">
+    <div class="profile-btn" onclick="goTo('settings')">
+      <div class="avatar" id="sidebar-avatar">👤</div>
+      <span id="sidebar-name">User</span>
+    </div>
+  </div>
+</aside>
+
+<!-- ─────────────────────────────────────────
+     MAIN CONTENT
+───────────────────────────────────────── -->
+<main class="main">
+
+  <!-- ══ DASHBOARD PAGE ══ -->
+  <div class="page active" id="page-dashboard">
+    <div class="dashboard-grid">
+
+      <!-- Calendar Widget -->
+      <div class="widget calendar-widget">
+        <div class="cal-header">
+          <button class="cal-nav" id="cal-prev">‹</button>
+          <span id="cal-month-label">APR 2025</span>
+          <button class="cal-nav" id="cal-next">›</button>
+        </div>
+        <div class="cal-body">
+          <div class="cal-days-row">
+            <div>MIN</div><div>SEN</div><div>SEL</div><div>RAB</div><div>KAM</div><div>JUM</div><div>SAB</div>
+          </div>
+          <div id="cal-grid"></div>
+        </div>
+      </div>
+
+      <!-- Task Widget -->
+      <div class="widget task-widget" style="display:flex;flex-direction:column;">
+        <div class="task-widget-header">
+          <div class="task-widget-date" id="task-widget-date" onclick="goTo('todo')" style="cursor:pointer;">4 APR</div>
+          <button class="btn-add-sm" onclick="goTo('todo')">Lihat Semua</button>
+        </div>
+        <div class="task-list-body" id="dash-task-list">
+          <div style="color:var(--grey);font-size:14px;font-weight:700;padding:20px 0;text-align:center;">
+            Pilih tanggal untuk melihat tugas 🐥
+          </div>
+        </div>
+      </div>
+
+      <!-- Pomodoro Mini Widget -->
+      <div class="widget pomo-mini" onclick="goTo('pomodoro')" style="cursor: pointer;">
+        <div style="font-family: 'Fredoka One', sans-serif; font-size: 20px; color: var(--red); text-align: center; margin-bottom: 15px;">Pomodoro</div>
+        <div class="pomo-ring" style="width: 130px; height: 130px; border-width: 10px; margin: 0 auto; display: flex; align-items: center; justify-content: center; background: #fff;">
+          <div class="pomo-time" id="dash-pomo-time" style="font-size: 16px; color: #555;">Sesi: 0<br>Tugas: 0</div>
+        </div>
+        <button class="btn-primary" style="margin-top: 15px; width: 100%; border-radius: 12px; font-size: 14px; padding: 10px;" onclick="goTo('pomodoro')">Buka Pomodoro</button>
+      </div>
+
+      <!-- Duck Area -->
+      <div class="duck-area">
+        <div class="duck-speech" id="duck-speech">Quack! Ayo selesaikan tugasmu hari ini! 🎯</div>
+        <div class="duck-img">🦆</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ TO-DO LIST PAGE ══ -->
+  <div class="page" id="page-todo">
+<div class="todo-layout">
+
+    <!-- LEFT: Project Panel -->
+    <div class="project-panel" id="project-panel">
+      <div class="project-panel-title">📁 Proyek</div>
+
+      <div class="proj-item active" onclick="selectProject('__all__')" id="proj-all">
+        <span class="proj-dot" style="background:#EF4444;"></span>
+        Semua Tugas
+        <span class="proj-count" id="count-all">0</span>
+      </div>
+
+      <div class="proj-item" onclick="selectProject('__today__')" id="proj-today">
+        <span class="proj-dot" style="background:#F97316;"></span>
+        Hari Ini
+        <span class="proj-count" id="count-today">0</span>
+      </div>
+
+      <div id="projects-list"><!-- rendered by JS --></div>
+
+      <button class="btn-new-proj" onclick="openProjectModal()">
+        <span style="font-size:18px;">+</span> Proyek Baru
+      </button>
+    </div>
+
+    <!-- ─────────────────────────────
+     MODAL: TAMBAH PROJECT
+     (WAJIB di luar panel)
+───────────────────────────── -->
+<div class="modal-overlay" id="modal-add-project">
+  <div class="modal-card">
+
+    <div class="modal-title">📁 Buat Proyek Baru</div>
+
+    <input 
+      type="text" 
+      class="modal-input" 
+      id="modal-project-name" 
+      placeholder="Nama proyek..."
+    >
+
+    <select class="select-input" id="modal-project-color">
+      <option value="#EF4444">🔴 Merah</option>
+      <option value="#F97316">🟠 Oranye</option>
+      <option value="#FDE047">🟡 Kuning</option>
+      <option value="#22C55E">🟢 Hijau</option>
+      <option value="#3B82F6">🔵 Biru</option>
+      <option value="#A855F7">🟣 Ungu</option>
+    </select>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal('modal-add-project')">
+        Batal
+      </button>
+
+      <button 
+        class="btn-primary" 
+        style="width:auto;padding:10px 28px;margin-top:0;"
+        onclick="addProject()"
+      >
+        Buat
+      </button>
+    </div>
+
+  </div>
+</div>
+
+    <!-- RIGHT: Main Area -->
+    <div class="todo-main">
+      
+
+      <div class="todo-topbar">
+        <div class="todo-page-heading" id="page-heading">Semua <span>Tugas</span></div>
+        <div class="topbar-actions">
+          <div class="view-toggle">
+            <button class="view-btn active" onclick="setView('list', this)">☰ List</button>
+            <button class="view-btn" onclick="setView('group', this)">⊞ Proyek</button>
+          </div>
+          <button class="btn-add-task-main" onclick="openTaskModal()">+ Tambah Tugas</button>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="project-progress">
+        <div class="progress-info">
+          <span id="prog-label">0 dari 0 selesai</span>
+          <span id="prog-pct">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="prog-fill" style="width:0%;"></div>
+        </div>
+      </div>
+
+      <!-- Filter chips -->
+      <div class="filter-bar">
+        <span style="font-family:Nunito;font-size:12px;font-weight:900;color:#CCC;margin-right:4px;">Filter:</span>
+        <div class="filter-chip active" onclick="setFilter('all', this)">Semua</div>
+        <div class="filter-chip" onclick="setFilter('active', this)">Aktif</div>
+        <div class="filter-chip" onclick="setFilter('done', this)">Selesai</div>
+        <div class="filter-chip" onclick="setFilter('today', this)">Hari Ini</div>
+      </div>
+
+      <div class="todo-content" id="todo-content">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- ══ POMODORO PAGE ══ -->
+  <div class="page" id="page-pomodoro">
+<div class="pomo-wrapper">
+
+  <!-- ── LEFT: TIMER PANEL ── -->
+  <div class="timer-panel">
+
+    <!-- Mode tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tab-focus" onclick="setMode('focus')">🎯 Fokus</button>
+      <button class="mode-tab" id="tab-short" onclick="setMode('short')">☕ Istirahat</button>
+      <button class="mode-tab" id="tab-long" onclick="setMode('long')">😴 Panjang</button>
+    </div>
+
+    <!-- SVG Ring Timer -->
+    <div class="pomo-ring-container">
+      <svg class="pomo-svg" width="220" height="220" viewBox="0 0 220 220">
+        <circle class="ring-bg" cx="110" cy="110" r="96"/>
+        <circle class="ring-fill" id="ring-fill" cx="110" cy="110" r="96"
+          stroke-dasharray="603" stroke-dashoffset="0"/>
+      </svg>
+      <div class="pomo-time-center">
+        <div class="pomo-time-big" id="pomo-time">25:00</div>
+        <div class="pomo-session-label" id="pomo-mode-label">Sesi Fokus</div>
+      </div>
+    </div>
+
+    <!-- Session dots -->
+    <div class="session-dots" id="session-dots">
+      <div class="session-dot current"></div>
+      <div class="session-dot"></div>
+      <div class="session-dot"></div>
+      <div class="session-dot"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="pomo-controls">
+      <button class="btn-ctrl" onclick="skipBack()" title="Mulai ulang">⏮</button>
+      <button class="btn-play-big" id="btn-play" onclick="toggleTimer()">▶</button>
+      <button class="btn-ctrl" onclick="skipForward()" title="Lewati">⏭</button>
+    </div>
+
+    <!-- Duck -->
+    <div class="duck-row">
+      <div class="duck-emoji-big">🦆</div>
+      <div class="duck-bubble" id="duck-msg">Pilih tugas yang mau dikerjakan, terus fokus! 🎯</div>
+    </div>
+  </div>
+
+  <!-- ── RIGHT PANEL ── -->
+  <div class="right-panel">
+
+    <!-- Task List -->
+    <div class="panel-card">
+      <div class="panel-card-title">📋 Tugas yang Dikerjakan</div>
+      <div id="pomo-task-list"><!-- rendered --></div>
+      <button class="btn-add-task-pomo" onclick="openAddTaskModal()">⊕ Tambah tugas baru</button>
+    </div>
+
+    <!-- Session Stats -->
+    <div class="panel-card">
+      <div class="panel-card-title">📊 Statistik Hari Ini</div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num" id="stat-sessions">0</div>
+          <div class="stat-label">Sesi Selesai</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-tasks">0</div>
+          <div class="stat-label">Tugas Done</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num" id="stat-minutes">0</div>
+          <div class="stat-label">Menit Fokus</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="panel-card" style="background:linear-gradient(135deg,#FEF9E7,#fff);border-color:#FDE047;">
+      <div class="panel-card-title" style="color:#F97316;">💡 Tips Pomodoro</div>
+      <div id="pomo-tip" style="font-size:13px;color:#777;font-weight:600;line-height:1.7;"></div>
+    </div>
+  </div>
+</div>
+  </div>
+
+  <!-- ══ SETTINGS PAGE ══ -->
+  <div class="page" id="page-settings">
+    <div class="settings-page">
+      <div class="settings-title">⚙️ Pengaturan</div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Profil</div>
+        <div class="settings-row">
+          <label>Nama Lengkap</label>
+          <input type="text" class="settings-input" id="set-name" placeholder="Nama kamu">
+        </div>
+        <div class="settings-row">
+          <label>Email</label>
+          <input type="email" class="settings-input" id="set-email" placeholder="email@kamu.com">
+        </div>
+        <button class="btn-save" onclick="saveProfile()">Simpan Perubahan</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Ubah Password</div>
+        <div class="settings-row">
+          <label>Password Lama</label>
+          <input type="password" class="settings-input" id="set-old-pass" placeholder="Password lama">
+        </div>
+        <div class="settings-row">
+          <label>Password Baru</label>
+          <input type="password" class="settings-input" id="set-new-pass" placeholder="Password baru">
+        </div>
+        <div class="settings-row">
+          <label>Konfirmasi Password Baru</label>
+          <input type="password" class="settings-input" id="set-new-pass2" placeholder="Ulangi password baru">
+        </div>
+        <button class="btn-save" onclick="changePassword()">Ubah Password</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-section-title">Sesi</div>
+        <p style="font-size:14px;color:#666;margin-bottom:16px;font-weight:600;">Ingin keluar dari To-Duck?</p>
+        <button class="btn-logout" onclick="doLogout()">🚪 Logout</button>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- BREAK OVERLAY -->
+<div class="break-overlay" id="break-overlay">
+  <div class="break-card">
+    <button class="btn-skip" onclick="endBreak()">Lewati Istirahat ⏭</button>
+
+    <div class="break-header">
+      <div class="break-title">🎮 Waktu Istirahat!</div>
+      <div class="break-subtitle">Pilih minigame atau biarkan timer berjalan</div>
+    </div>
+
+    <div class="break-timer" id="break-timer">05:00</div>
+
+    <!-- Game selection -->
+    <div id="game-selection-area">
+      <div class="game-selection">
+        <div class="game-card" id="game-card-memory" onclick="selectGame('memory')">
+          <div class="game-icon">🃏</div>
+          <div class="game-name">Memory Match</div>
+          <div class="game-desc">Temukan pasangan kartu</div>
+        </div>
+        <div class="game-card" id="game-card-catch" onclick="selectGame('catch')">
+          <div class="game-icon">🦆</div>
+          <div class="game-name">Tangkap Bebek!</div>
+          <div class="game-desc">Klik bebek sebanyak mungkin</div>
+        </div>
+        <div class="game-card" id="game-card-scramble" onclick="selectGame('scramble')">
+          <div class="game-icon">🔤</div>
+          <div class="game-name">Acak Kata</div>
+          <div class="game-desc">Tebak kata yang diacak</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GAME: Memory Match -->
+    <div class="game-area" id="game-memory">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-weight:800;font-size:14px;">🃏 Memory Match</span>
+        <span id="mem-score" style="font-weight:800;color:var(--blue);">0 pasang</span>
+        <button class="btn-game btn-blue" onclick="initMemory()">🔄 Reset</button>
+      </div>
+      <div class="memory-grid" id="memory-grid"></div>
+    </div>
+
+    <!-- GAME: Catch Duck -->
+    <div class="game-area" id="game-catch">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+        <span style="font-weight:800;font-size:14px;">🦆 Tangkap Bebek!</span>
+        <button class="btn-game btn-blue" onclick="initCatch()">🔄 Reset</button>
+      </div>
+      <div class="catch-game-area" id="catch-area"></div>
+      <div class="catch-score" id="catch-score" style="margin-top:10px;">Score: 0</div>
+    </div>
+
+    <!-- GAME: Word Scramble -->
+    <div class="game-area" id="game-scramble">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+        <span style="font-weight:800;font-size:14px;">🔤 Acak Kata</span>
+        <span id="scramble-score" style="font-weight:800;color:var(--blue);">0 benar</span>
+      </div>
+      <div class="scramble-word" id="scramble-display">?????</div>
+      <div class="scramble-hint" id="scramble-hint">Hint: ???</div>
+      <div style="margin-top:12px;">
+        <input type="text" class="scramble-input" id="scramble-input" placeholder="Jawaban kamu..." autocomplete="off">
+        <div class="scramble-result" id="scramble-result"></div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:10px;">
+          <button class="btn-game btn-blue" onclick="checkScramble()">✓ Cek Jawaban</button>
+          <button class="btn-game" style="background:#F3F4F6;color:#555;" onclick="nextScramble()">→ Skip</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────────
+     MODAL – ADD TASK
+───────────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-task">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-task-title">➕ Tambah Tugas</div>
+        <button class="modal-close" onclick="closeModal('modal-task')">✕</button>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">📝 Nama Tugas</div>
+        <input type="text" class="form-input" id="t-name" placeholder="Apa yang mau dikerjakan?">
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">📋 Deskripsi <span class="optional-badge">Opsional</span></div>
+        <textarea class="form-textarea" id="t-desc" placeholder="Tambahkan catatan atau detail..."></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <div class="form-label">📅 Deadline <span class="optional-badge">Opsional</span></div>
+          <input type="date" class="form-input" id="t-date">
+        </div>
+        <div class="form-group">
+          <div class="form-label">🕐 Waktu <span class="optional-badge">Opsional</span></div>
+          <input type="time" class="form-input" id="t-time">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">🔔 Pengingat</div>
+        <div class="reminder-row">
+          <span class="reminder-label">🔔 Aktifkan pengingat</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="t-reminder-toggle" onchange="toggleReminder()">
+            <div class="toggle-track"></div>
+            <div class="toggle-knob"></div>
+          </label>
+        </div>
+        <div class="reminder-options" id="reminder-opts">
+          <div class="form-label" style="margin-bottom:8px;">Ingatkan saya:</div>
+          <div class="reminder-chips">
+            <div class="reminder-chip selected" data-val="30m" onclick="selectReminder(this)">30 menit sebelum</div>
+            <div class="reminder-chip" data-val="1h" onclick="selectReminder(this)">1 jam sebelum</div>
+            <div class="reminder-chip" data-val="3h" onclick="selectReminder(this)">3 jam sebelum</div>
+            <div class="reminder-chip" data-val="1d" onclick="selectReminder(this)">1 hari sebelum</div>
+            <div class="reminder-chip" data-val="2d" onclick="selectReminder(this)">2 hari sebelum</div>
+            <div class="reminder-chip" data-val="1w" onclick="selectReminder(this)">1 minggu sebelum</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">📁 Proyek <span class="optional-badge">Opsional</span></div>
+        <select class="form-select" id="t-project">
+          <option value="">Tidak ada proyek</option>
+        </select>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-task')">Batal</button>
+        <button class="btn-submit" onclick="addTask()">Simpan Tugas</button>
+      </div>
+    </div>
+  </div>
+
+<!-- MODAL – ADD PROJECT -->
+<div class="modal-overlay" id="modal-add-project">
+    <div class="modal-card project-modal-card">
+      <div class="modal-header">
+        <div class="modal-title">📁 Proyek Baru</div>
+        <button class="modal-close" onclick="closeModal('modal-add-project')">✕</button>
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">Nama Proyek</div>
+        <input type="text" class="form-input" id="p-name" placeholder="Contoh: Tugas Kuliah">
+      </div>
+
+      <div class="form-group">
+        <div class="form-label">Warna</div>
+        <div class="color-options" id="color-picker">
+          <div class="color-opt selected" style="background:#EF4444;" data-color="#EF4444" onclick="selectColor(this)">
+          </div>
+          <div class="color-opt" style="background:#F97316;" data-color="#F97316" onclick="selectColor(this)"></div>
+          <div class="color-opt" style="background:#FDE047;" data-color="#FDE047" onclick="selectColor(this)"></div>
+          <div class="color-opt" style="background:#22C55E;" data-color="#22C55E" onclick="selectColor(this)"></div>
+          <div class="color-opt" style="background:#3B82F6;" data-color="#3B82F6" onclick="selectColor(this)"></div>
+          <div class="color-opt" style="background:#A855F7;" data-color="#A855F7" onclick="selectColor(this)"></div>
+          <div class="color-opt" style="background:#EC4899;" data-color="#EC4899" onclick="selectColor(this)"></div>
+          <div class="color-opt" style="background:#06B6D4;" data-color="#06B6D4" onclick="selectColor(this)"></div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeModal('modal-add-project')">Batal</button>
+        <button class="btn-submit" onclick="submitProject()">Buat Proyek</button>
+      </div>
+    </div>
+  </div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

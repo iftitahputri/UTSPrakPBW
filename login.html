@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Duck – Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+
+  <div class="auth-card" id="auth-card">
+    <div class="auth-logo">
+      <!-- Ganti emoji dengan asset bebek jika ingin menggunakan gambar -->
+      <!-- <img src="../assets/duck.png" width="80" height="80" alt="To-Duck Mascot"> -->
+      <img src="assets/duck.png" width="80" height="80" alt="To-Duck Mascot" onerror="this.outerHTML='<div class=\'duck-emoji\'>🐥</div>'">
+      <span class="auth-title">To-Duck</span>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div id="login-form">
+      <div class="form-group">
+        <label>Email/Username</label>
+        <input type="text" class="form-input" id="login-email" placeholder="Enter email or username">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-input" id="login-pass" placeholder="Enter password">
+      </div>
+      <button class="btn-primary" onclick="doLogin()">Login</button>
+      <div class="auth-footer">
+        Don't have an account? <span class="auth-link" onclick="showRegister()">Sign up</span>
+      </div>
+    </div>
+
+    <!-- REGISTER FORM -->
+    <div id="register-form" style="display:none;">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" class="form-input" id="reg-name" placeholder="Enter full name">
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-input" id="reg-email" placeholder="Enter email">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-input" id="reg-pass" placeholder="Create password">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" class="form-input" id="reg-pass2" placeholder="Confirm password">
+      </div>
+      <button class="btn-primary" onclick="doRegister()">Sign up</button>
+      <div class="auth-footer">
+        Already have an account? <span class="auth-link" onclick="showLogin()">Login</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function showRegister() {
+      document.getElementById('login-form').style.display = 'none';
+      document.getElementById('register-form').style.display = 'block';
+    }
+
+    function showLogin() {
+      document.getElementById('register-form').style.display = 'none';
+      document.getElementById('login-form').style.display = 'block';
+    }
+
+    function doLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const pass  = document.getElementById('login-pass').value.trim();
+      if (!email || !pass) { showToast('Please fill in all fields.'); return; }
+      const users = JSON.parse(localStorage.getItem('toduck_users') || '[]');
+      const user  = users.find(u => (u.email === email || u.username === email) && u.password === pass);
+      if (!user && users.length > 0) { showToast('Invalid email or password.'); return; }
+      const activeUser = user || { name: email, email: email, username: email };
+      localStorage.setItem('toduck_active', JSON.stringify(activeUser));
+      showToast('Login successful.');
+      setTimeout(() => window.location.href = 'index.html', 800);
+    }
+
+    function doRegister() {
+      const name  = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const pass  = document.getElementById('reg-pass').value.trim();
+      const pass2 = document.getElementById('reg-pass2').value.trim();
+      if (!name || !email || !pass || !pass2) { showToast('Please fill in all fields.'); return; }
+      if (pass !== pass2) { showToast('Passwords do not match.'); return; }
+      const users = JSON.parse(localStorage.getItem('toduck_users') || '[]');
+      if (users.find(u => u.email === email)) { showToast('This email is already registered.'); return; }
+      const newUser = { name, email, username: email, password: pass };
+      users.push(newUser);
+      localStorage.setItem('toduck_users', JSON.stringify(users));
+      localStorage.setItem('toduck_active', JSON.stringify(newUser));
+      showToast('Your account has been created successfully!');
+      setTimeout(() => window.location.href = 'index.html', 800);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const regVisible = document.getElementById('register-form').style.display !== 'none';
+        if (regVisible) doRegister(); else doLogin();
+      }
+    });
+
+    if (localStorage.getItem('toduck_active')) {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
