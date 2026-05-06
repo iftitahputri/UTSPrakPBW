@@ -67,7 +67,7 @@ body {
   justify-content: center;
 }
 
-.logo-area {
+.logo-area { 
   padding: 22px 20px 10px;
   display: flex;
   align-items: center;
@@ -1158,29 +1158,6 @@ body.auth-page {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 3px; }
-
-/* Toast
-.toast {
-  position: fixed;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-  top: 20px;
-  left: 50%;
-  transform: translate(-50%, -100px);
-  background: var(--black);
-  color: #fff;
-  padding: 14px 28px;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 14px;
-  z-index: 999;
-  opacity: 0;
-  transition: all .4s ease;
-}
-
-.toast.show {
-  transform: translate(-50%, 0);
-  opacity: 1;
-} */
 
 /* ── TODO-SPECIFIC STYLES ── */
 
