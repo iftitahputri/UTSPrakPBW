@@ -79,6 +79,7 @@ function goTo(page) {
   if (page === 'pomodoro') { 
     if(typeof renderTaskList === 'function') renderTaskList(); 
     if(typeof updateDisplay === 'function') updateDisplay(); 
+    if(typeof showRandomTip === 'function') showRandomTip();
   }
   if (page === 'settings') { if(typeof renderSettings === 'function') renderSettings(); }
 }
