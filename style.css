@@ -459,14 +459,14 @@ body.auth-page {
 }
 
 .pomo-mini-title {
-  position: absolute;
-  top: 20px;
+  position: relative;
+  top: 0px;
   background: none;
   border: none;
   cursor: pointer;
   color: #DC2626;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight:1000;
 }
 
 .pomo-ring{
@@ -561,9 +561,9 @@ body.auth-page {
 }
 
 .duck-speech {
-  position: absolute;
-  top: 90px;
-  left: 200px;
+  position: relative;
+  top: -180px;
+  left: 130px;
   font-weight: 700;
   font-size: 20px;
   color: #333;
